@@ -1,99 +1,136 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🧞 InfraBuddy
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**InfraBuddy** is a stack-agnostic, ultra-configurable DevOps scaffolder that helps developers spin up project infrastructure in seconds.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+It works like magic: you answer a few questions — and InfraBuddy generates a zipped folder with battle-tested configs tailored to your stack.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## ✨ Vision
 
-## Project setup
+The goal of InfraBuddy is to give every developer — backend, frontend, or full-stack — a frictionless way to:
 
-```bash
-$ npm install
+- Containerize their app (with sane Docker defaults)
+- Add CI/CD pipelines (starting with GitHub Actions)
+- Deploy or provision cloud infrastructure (starting with AWS via Terraform)
+
+It’s DevOps as a **starter kit**, not a punishment.
+
+---
+
+## ✅ MVP Scope
+
+### 📁 Output Contents
+
+Depending on user choices, InfraBuddy can generate:
+
+```text
+infra-output/
+├── Dockerfile
+├── docker-compose.yml
+├── nginx/
+│   └── default.conf
+├── .dockerignore
+├── .env.sample
+├── .github/
+│   └── workflows/
+│       └── [dev|staging|prod].yml
+├── terraform/
+│   ├── main.tf
+│   ├── ec2.tf
+│   └── ...
+└── README.md
 ```
 
-## Compile and run the project
+---
+
+### 💬 Supported Features (MVP)
+
+#### 🔧 Docker
+
+- Language support: NestJS, Express, React, Go, Rust, Laravel, Rails, Spring Boot, .NET, etc.
+- Optional database config: PostgreSQL, MongoDB, MySQL, Redis
+- Built-in Nginx (SPA mode or reverse proxy)
+- User-defined services via text input
+- `.env.sample` and `.dockerignore` generation
+- Multi-stage Dockerfiles with sensible build commands
+
+#### ⚙️ GitHub Actions
+
+- Environment-based workflows: `dev`, `staging`, `prod`
+- Stack-aware setup (Node, Go, Rust, Java, etc.)
+- Support for test/build/dockerize phases
+- Fallback if no stack specified
+
+#### ☁️ Terraform (AWS only)
+
+- Optional infra: EC2, RDS, S3, ECS, VPC
+- Default values with override capability
+- Output IPs and URLs
+- Sane security defaults for quick prototyping
+
+---
+
+## 🔁 Flow (Behind the Scenes)
+
+1. **User answers CLI or API questions**
+2. Answers go into a `context builder` (per config type)
+3. Context is passed through a **Mustache transformer**
+4. Templates are populated + saved to an output directory
+5. Directory is zipped and returned to the user
+
+---
+
+## 🔮 Future Additions
+
+- GCP + Azure Terraform support
+- Kubernetes (K8s) modules
+- Remote deployment hooks (e.g., to ECS or DigitalOcean)
+- Web-based config builder (powered by the same API)
+- Live preview before zip/download
+- Preset saving & sharing
+
+---
+
+## 🧠 Philosophy
+
+- ✅ Opinionated defaults — always work out of the box
+- 🧱 Modular templates — extend easily per stack or provider
+- 🧘 Don’t ask the user for 50 things — just the 5 that matter
+- 📦 Output should be deployable today, not “someday”
+
+---
+
+## 🛠 Dev Setup (Locally)
 
 ```bash
-# development
-$ npm run start
+# install deps
+npm install
 
-# watch mode
-$ npm run start:dev
+# run CLI (WIP)
+npm cli
 
-# production mode
-$ npm run start:prod
+# run API (WIP)
+npm run start:dev
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
+## 📚 Tech Stack
 
-# e2e tests
-$ npm run test:e2e
+- Node.js + TypeScript
+- Mustache for templating
+- Archiver for zip generation
+- Inquirer for CLI UX
+- NestJS for the API
 
-# test coverage
-$ npm run test:cov
-```
+---
 
-## Deployment
+## ✍️ Author
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Built with too much caffeine and a sprinkle of rage by [@alexin](https://github.com/alexindevs).
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+InfraBuddy isn’t here to replace DevOps engineers —  
+it’s here to stop solo devs from burning out trying to be one.
