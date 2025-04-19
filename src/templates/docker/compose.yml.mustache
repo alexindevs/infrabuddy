@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+  {{#services}}
+  {{name}}:
+    container_name: {{container_name}}
+    {{#build}}
+    build:
+      context: {{context}}
+      {{#dockerfile}}dockerfile: {{dockerfile}}{{/dockerfile}}
+      {{#args}}
+      args:
+        {{#each_args}}
+        {{key}}: {{value}}
+        {{/each_args}}
+      {{/args}}
+    {{/build}}
+    {{#image}}image: {{image}}{{/image}}
+    {{#restart}}restart: {{restart}}{{/restart}}
+    {{#depends_on}}
+    depends_on:
+      {{#items}}- {{.}}
+      {{/items}}
+    {{/depends_on}}
+    {{#command}}command: {{command}}{{/command}}
+    {{#entrypoint}}entrypoint: {{entrypoint}}{{/entrypoint}}
+    {{#env_file}}env_file: {{env_file}}{{/env_file}}
+    {{#environment}}
+    environment:
+      {{#vars}}
+      {{key}}: {{value}}
+      {{/vars}}
+    {{/environment}}
+    {{#ports}}
+    ports:
+      {{#mappings}}- "{{host}}:{{container}}"{{/mappings}}
+    {{/ports}}
+    {{#volumes}}
+    volumes:
+      {{#mappings}}- "{{host}}:{{container}}"{{/mappings}}
+    {{/volumes}}
+    {{#networks}}
+    networks:
+      {{#items}}- {{.}}{{/items}}
+    {{/networks}}
+
+  {{/services}}
+
+{{#volumes_defined}}
+volumes:
+  {{#volumes}}
+  {{.}}:
+  {{/volumes}}
+{{/volumes_defined}}
+
+{{#networks_defined}}
+networks:
+  {{#networks}}
+  {{.}}:
+    driver: bridge
+  {{/networks}}
+{{/networks_defined}}

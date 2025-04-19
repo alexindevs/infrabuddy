@@ -1,0 +1,8 @@
+resource "aws_s3_bucket" "bucket" {
+  bucket = "infrabuddy-bucket-${random_id.id.hex}"
+  acl    = "private"
+}
+
+resource "random_id" "id" {
+  byte_length = 4
+}

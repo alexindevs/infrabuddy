@@ -1,0 +1,19 @@
+{{#include_ec2}}output "ec2_public_ip" {
+  value = module.ec2.public_ip
+}
+{{/include_ec2}}
+
+{{#include_rds}}output "rds_endpoint" {
+  value = module.rds.endpoint
+}
+{{/include_rds}}
+
+{{#include_s3}}output "s3_bucket_name" {
+  value = module.s3.bucket_name
+}
+{{/include_s3}}
+
+{{#include_ecs}}output "ecs_service_url" {
+  value = module.ecs.service_url
+}
+{{/include_ecs}}

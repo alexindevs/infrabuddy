@@ -1,0 +1,43 @@
+FROM {{base_image}}{{#base_image_tag}}:{{base_image_tag}}{{/base_image_tag}}
+
+{{#build_args}}
+ARG {{name}}{{#default_value}}={{default_value}}{{/default_value}}
+{{/build_args}}
+
+{{#env_vars}}
+ENV {{name}}={{value}}
+{{/env_vars}}
+
+WORKDIR {{workdir}}
+
+{{#pre_copy_commands}}
+RUN {{.}}
+{{/pre_copy_commands}}
+
+{{#copy_blocks}}
+COPY {{source}} {{destination}}
+{{/copy_blocks}}
+
+{{#run_blocks}}
+RUN {{.}}
+{{/run_blocks}}
+
+{{#expose_ports}}
+EXPOSE {{.}}
+{{/expose_ports}}
+
+{{#healthcheck}}
+HEALTHCHECK --interval={{interval}} --timeout={{timeout}} --retries={{retries}} CMD {{command}}
+{{/healthcheck}}
+
+{{#entrypoint}}
+ENTRYPOINT [{{#entrypoint}}{{#is_last}}"{{.}}"{{/is_last}}{{^is_last}}"{{.}}", {{/is_last}}{{/entrypoint}}]
+{{/entrypoint}}
+
+{{#cmd}}
+CMD [{{#cmd}}{{#is_last}}"{{.}}"{{/is_last}}{{^is_last}}"{{.}}", {{/is_last}}{{/cmd}}]
+{{/cmd}}
+
+{{^cmd}}
+CMD ["sh"]
+{{/cmd}}

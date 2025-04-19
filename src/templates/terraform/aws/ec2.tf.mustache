@@ -1,0 +1,8 @@
+resource "aws_instance" "app" {
+  ami           = "ami-0e6cbc8bb31706253"
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "InfraBuddyEC2"
+  }
+}
