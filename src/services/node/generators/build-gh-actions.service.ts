@@ -25,7 +25,7 @@ export class BuildGithubActionsService {
     };
 
     const deployYml = await this.renderDeployWorkflow(templateData);
-    generatedFiles.set('.github/workflows/deploy.yml', deployYml);
+    generatedFiles.set('.github/workflows/ci.yml', deployYml);
 
     return generatedFiles;
   }
@@ -33,7 +33,7 @@ export class BuildGithubActionsService {
   private async renderDeployWorkflow(
     answers: GhActionsAnswers & { project_name: string },
   ): Promise<string> {
-    const templatePath = path.join(this.templateDir, 'deploy.yml.mustache');
+    const templatePath = path.join(this.templateDir, 'ci.yml.mustache');
     const template = await fs.readFile(templatePath, 'utf8');
 
     return Mustache.render(template, answers);

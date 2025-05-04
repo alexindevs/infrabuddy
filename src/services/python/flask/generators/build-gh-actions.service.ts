@@ -13,7 +13,7 @@ export class BuildFlaskGhActionsService {
     'python',
     'flask',
     'gh-actions',
-    'deploy.yml.mustache',
+    'ci.yml.mustache',
   );
 
   async generateWorkflow(
@@ -23,7 +23,7 @@ export class BuildFlaskGhActionsService {
     const template = await fs.readFile(this.templatePath, 'utf8');
     const rendered = Mustache.render(template, context);
 
-    return new Map([['.github/workflows/deploy.yml', rendered]]);
+    return new Map([['.github/workflows/ci.yml', rendered]]);
   }
 
   private buildContext(answers: FlaskGhActionsAnswers): Record<string, any> {

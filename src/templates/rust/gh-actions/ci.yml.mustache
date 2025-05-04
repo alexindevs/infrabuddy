@@ -1,0 +1,71 @@
+{{=<% %>=}}
+
+name: Build and Deploy (Rust)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🦀 Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: 🔎 Run tests
+        run: cargo test --release
+
+      - name: 🛠️ Build binary
+        run: cargo build --release
+
+      <%#is_dockerized%>
+      - name: ✍️ Write .env file from secrets
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: 🐳 Build Docker image
+        run: docker compose -f docker/compose.yml build --build-arg TAG=latest
+
+      - name: 🔐 Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 🚀 Push Docker image
+        run: |
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/<% project_name %>
+          IMAGE_NAME=$(echo $IMAGE_NAME | tr '[:upper:]' '[:lower:]')
+          docker push ${IMAGE_NAME}:latest
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      <%/is_dockerized%>
+
+      <%#deploy_ssh%>
+      - name: 🧬 Deploy to server via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }}
+            <%#is_dockerized%>
+            docker pull ${{ secrets.DOCKER_USERNAME }}/<% project_name %>:latest
+            docker compose -f docker/compose.yml down
+            docker compose -f docker/compose.yml up --build -d
+            <%/is_dockerized%>
+            <%^is_dockerized%>
+            git pull
+            cargo build --release
+            pm2 restart ${{ secrets.PM2_APP_NAME || 'app' }}
+            <%/is_dockerized%>
+      <%/deploy_ssh%>
