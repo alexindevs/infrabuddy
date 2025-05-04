@@ -57,7 +57,7 @@ Here’s what’s coming next:
 
 - 🌍 **Terraform generation**: Infra-as-code templates for AWS, GCP, Azure
 - ☸️ **Kubernetes support**: Helm charts, K8s manifests, deployment strategies
-- 🗄️ **More Stacks**: Rust with Cargo/Axum, Java with Spring Boot, Go with Gin/Fiber
+- 🗄️ **More Stacks**: Rust with Axum/Actix, Java with Spring Boot, Go with Gin/Fiber
 - 🎨 **Frontend support**: React, Vue, SPA deployments with Nginx
 - 📁 **Custom template loading**: Bring your own infra base and use InfraBuddy to extend it
 - 🖥 **Web interface**: For folks who don’t vibe with the CLI
