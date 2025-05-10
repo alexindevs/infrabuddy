@@ -20,7 +20,10 @@ async function main() {
   ]);
 
   const dockerAnswers: any = await askDockerQuestions(stack);
-  const ghActionsAnswers: any = await askGitHubActionsQuestions(stack, dockerAnswers.project_name);
+  const ghActionsAnswers: any = await askGitHubActionsQuestions(
+    stack,
+    dockerAnswers.project_name,
+  );
 
   const endpoint = `http://localhost:3000/${stack}/generate`;
 
@@ -68,7 +71,10 @@ async function askDockerQuestions(stack: Stack) {
         choices: ['api', 'spa'],
       },
     ];
-    const answers = await inquirer.prompt([...commonQuestions, ...nodeQuestions]);
+    const answers = await inquirer.prompt([
+      ...commonQuestions,
+      ...nodeQuestions,
+    ]);
     return {
       ...answers,
     };

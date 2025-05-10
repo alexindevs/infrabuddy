@@ -1,0 +1,52 @@
+{{#use_distroless}}
+FROM eclipse-temurin:24-jdk-alpine AS builder
+
+WORKDIR /app
+COPY . .
+
+{{#is_maven}}
+RUN ./mvnw clean package -DskipTests
+{{/is_maven}}
+{{#is_gradle}}
+RUN ./gradlew build -x test
+{{/is_gradle}}
+
+FROM gcr.io/distroless/java21-debian11
+
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
+
+EXPOSE {{port}}
+
+CMD ["app.jar"]
+{{/use_distroless}}
+
+{{^use_distroless}}
+FROM {{#is_maven}}maven:3.8-openjdk-17{{/is_maven}}{{#is_gradle}}gradle:7.6.1-jdk17{{/is_gradle}} AS build
+
+WORKDIR /app
+COPY . .
+
+{{#is_maven}}
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+{{/is_maven}}
+
+{{#is_gradle}}
+COPY build.gradle .
+COPY settings.gradle .
+COPY src ./src
+RUN gradle build -x test
+{{/is_gradle}}
+
+FROM eclipse-temurin:24-jre-alpine
+
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE {{port}}
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+{{/use_distroless}}
